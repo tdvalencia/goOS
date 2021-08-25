@@ -1,28 +1,35 @@
-;
-; Boot sector that prints a string
-;
-[org 0x7c00]                ; Tell assembler where code will be loaded
+; Read sectors form the boot disk using disk_read
+[org 0x7c00]
+    ; mov [BOOT_DRIVE], dl
 
-    mov bx, HELLO_MSG       ; using bx as function parameter
-    call print_string       ; this allows us to specify address of string
+    mov bp, 0x8000
+    mov sp, bp
 
-    mov bx, GOODBYE_MSG
-    call print_string
+    mov bx, 0x9000
+    mov dh, 2
+    ; mov dl, [BOOT_DRIVE]
+    call disk_load
 
-    mov dx, 0x1fb6
+    mov dx, [0x9000]
+    call print_hex
+
+    mov dx, [0x9000 + 512]
     call print_hex
 
     jmp $
 
 %include "asm/print_funcs.asm"
+%include "asm/disk_load.asm"
 
 ; Data
-HELLO_MSG:
-    db 'Hello World!',0
-
-GOODBYE_MSG:
-    db 'Goodbye!',0
+BOOT_DRIVE: db 0
 
 ; Padding and magic BIOS number
-    times 510-($-$$) db 0
-    dw 0xaa55
+times 510-($-$$) db 0
+dw 0xaa55
+
+; We know BIOS will load boot sector,
+; so we add a few more sectors to code
+; to see if they are loaded
+times 256 dw 0xdada
+times 256 dw 0xface
