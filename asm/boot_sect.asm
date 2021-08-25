@@ -1,7 +1,5 @@
 ; Read sectors form the boot disk using disk_read
 [org 0x7c00]
-    ; mov [BOOT_DRIVE], dl
-
     mov bp, 0x8000
     mov sp, bp
 
@@ -18,14 +16,11 @@
 
     jmp $
 
-%include "asm/print_funcs.asm"
+%include "asm/lib/print_funcs.asm"
 %include "asm/disk_load.asm"
 
-; Data
-BOOT_DRIVE: db 0
-
 ; Padding and magic BIOS number
-times 510-($-$$) db 0
+times 510 - ($-$$) db 0
 dw 0xaa55
 
 ; We know BIOS will load boot sector,

@@ -16,14 +16,9 @@ print_string:
 
 print_hex:
 
-    HEX_OUT: db '0x0000', 0
     pusha
     mov cx, 0
  
-    ; TODO: manipulate chars at HEX_OUT to reflect dx
-    ; passing 0x1fb6
-    ; AND and SHR kw prob help with bit manipulation
-
     hex_loop:
         cmp cx, 4
         je end
@@ -50,4 +45,5 @@ print_hex:
 
         popa
         ret
-        
+
+HEX_OUT: db '0x0000', 0

@@ -15,7 +15,7 @@ disk_load:
     jc disk_error   ; Jump if error (error = carry flag set)
 
     pop dx          ; Restore dx from stack
-    cmp dh, al      ; if AL (sectors read) != DH (sectors expected)
+    cmp al, dh      ; if AL (sectors read) != DH (sectors expected)
     jne disk_error  ;   display error message
     popa
     ret
