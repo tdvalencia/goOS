@@ -17,25 +17,37 @@ print_string:
 print_hex:
 
     HEX_OUT: db '0x0000', 0
-    mov cx, 2
+    pusha
+    mov cx, 0
  
     ; TODO: manipulate chars at HEX_OUT to reflect dx
     ; passing 0x1fb6
-    ; AND and SHR kw prob help with dealing with the bits
+    ; AND and SHR kw prob help with bit manipulation
 
-    char_loop:
-        and dx, 0xf
+    hex_loop:
+        cmp cx, 4
+        je end
 
-        cmp dl, 0xa
-        jl set_val
-        add dl, 7
-        add [HEX_OUT+cx], byte dl
-
-        mov bx, HEX_OUT
-        call print_string
-        ret
+        mov ax, dx
+        and ax, 0x000f
+        add al, 0x30
+        cmp al, 0x39
+        jle set_val
+        add al, 7
 
     set_val:
-        add [HEX_OUT+cx], byte dl
-        inc cx
-        shr dx, 1
+        mov bx, HEX_OUT + 5
+        sub bx, cx
+        mov [bx], al
+        ror dx, 4
+
+        add cx, 1
+        jmp hex_loop
+
+    end:
+        mov bx, HEX_OUT
+        call print_string
+
+        popa
+        ret
+        

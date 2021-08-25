@@ -18,10 +18,10 @@
 
 ; Data
 HELLO_MSG:
-    db 'Hello World!', 0
+    db 'Hello World!',0
 
 GOODBYE_MSG:
-    db 'Goodbye!', 0
+    db 'Goodbye!',0
 
 ; Padding and magic BIOS number
     times 510-($-$$) db 0
