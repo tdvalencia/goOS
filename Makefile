@@ -1,8 +1,8 @@
+image	:= bin/os-image.bin
+kernel	:= bin/kernel.bin
+boot	:= bin/boot_sect.bin
 
-all: os-image.bin clean
-
-kernel.bin: kernel_entry.o kernel.o
-	ld -o $@ -Ttext 0x1000 $^ --oformat binary -e main
+all: $(image) clean
 
 kernel_entry.o: kernel/kernel_entry.asm
 	nasm $< -f elf64 -o $@
@@ -10,10 +10,13 @@ kernel_entry.o: kernel/kernel_entry.asm
 kernel.o: kernel/kernel.c
 	gcc -ffreestanding -c $< -o $@
 
-boot_sect.bin: asm/boot_sect.asm
+$(kernel): kernel_entry.o kernel.o
+	ld -o $@ -Ttext 0x1000 $^ --oformat binary -e main
+
+$(boot): asm/boot_sect.asm
 	nasm $< -f bin -o $@
 
-os-image.bin: boot_sect.bin kernel.bin
+$(image): $(boot) $(kernel)
 	cat $^ > $@
 
 clean:
