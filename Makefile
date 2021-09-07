@@ -5,7 +5,7 @@ image	:= boot.iso
 C_SRC		:= $(wildcard drivers/*.c kernel/*.c)
 OBJ			:= $(C_SRC:.c=.o)
 
-all: $(image) clean_obj
+all: $(image) clean
 
 # kernel_entry.o: kernel/kernel_entry.asm
 # 	nasm $< -f win64 -o $@
@@ -14,7 +14,7 @@ all: $(image) clean_obj
 # 	gcc -ffreestanding -c $^ -o $@
 
 %.o: %.c
-	gcc -ffreestanding -c $< -o $@
+	i686-elf-gcc -g -ffreestanding -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf64 -o $@
@@ -23,7 +23,7 @@ all: $(image) clean_obj
 	nasm $< -f bin -o $@
 
 $(kernel): kernel/kernel_entry.o $(OBJ) # kernel.o	# linux: 
-	ld -o $@ -Ttext 0x1000 $^ --oformat binary
+	i686-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
 
 $(boot): boot/boot_sect.asm
 	nasm $< -f bin -o $@
@@ -31,8 +31,9 @@ $(boot): boot/boot_sect.asm
 $(image): $(boot) $(kernel)
 	cat $^ > $@
 
-clean_obj:
+clean:
+	rm ./**/*.bin
 	rm ./**/*.o
 
-clean:
+clean_iso:
 	rm *.iso
