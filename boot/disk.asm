@@ -12,7 +12,7 @@ disk_load:
 
     int 0x13        ; BIOS interrupt
 
-    jc disk_error   ; Jump if error (error = carry flag set)
+    jc disk_error   ; Jump if error (error == carry flag set)
 
     pop dx          ; Restore dx from stack
     cmp al, dh      ; if AL (sectors read) != DH (sectors expected)
@@ -23,6 +23,16 @@ disk_load:
 disk_error:
     mov bx, DISK_ERROR_MSG
     call print_string
+    mov dh, ah
+    call print_hex
+    jmp disk_loop
+
+sectors_error:
+    mov bx, SECTORS_ERROR
+    call print_string
+
+disk_loop:
     jmp $
 
 DISK_ERROR_MSG db "Disk read error!",0
+SECTORS_ERROR db "Incorrect number of sectors read", 0

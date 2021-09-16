@@ -13,11 +13,11 @@ KERNEL_OFFSET equ 0x1000
 
     jmp $
 
-%include "boot/16bit/print_funcs.asm"
-%include "boot/32bit/gdt.asm"
-%include "boot/32bit/print.asm"
-%include "boot/32bit/switch.asm"
-%include "boot/disk_load.asm"
+%include "boot/16print.asm"
+%include "boot/gdt.asm"
+%include "boot/32print.asm"
+%include "boot/switch.asm"
+%include "boot/disk.asm"
 
 [bits 16]
 load_kernel:
@@ -25,7 +25,7 @@ load_kernel:
     call print_string
 
     mov bx, KERNEL_OFFSET
-    mov dh, 32
+    mov dh, 16
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret
