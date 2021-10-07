@@ -1,9 +1,9 @@
 kernel	:= bin/kernel.bin
 boot	:= bin/boot_sect.bin
-image	:= boot.iso
+image	:= boot.flp
 
-C_SRC	:= $(wildcard drivers/*.c kernel/*.c)
-OBJ		:= $(C_SRC:.c=.o)
+C_SRC	:= $(wildcard drivers/*.c kernel/*.c cpu/*.c)
+OBJ		:= $(C_SRC:.c=.o cpu/interrupt.o)
 
 all: $(image)
 

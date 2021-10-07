@@ -3,6 +3,7 @@
 *.o
 *.pdf
 
+libc/
 bin/
 *.bin
 *.iso
