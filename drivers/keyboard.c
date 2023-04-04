@@ -3,15 +3,17 @@
 #include "../cpu/isr.h"
 #include "screen.h"
 
+typedef unsigned char u8;
+
 static void keyboard_callback(registers_t regs) {
     u8 scancode = port_byte_in(0x60);
-    char *sc_ascii;
-    int_to_ascii(scancode, sc_ascii);
-    kprint("Keyboard scancode: ");
-    kprint(sc_ascii);
-    kprint(", ");
+    // char *sc_ascii;
+    // int_to_ascii(scancode, sc_ascii);
+    // kprint("Keyboard scancode: ");
+    // kprint(sc_ascii);
+    // kprint(", ");
     print_letter(scancode);
-    kprint("\n");
+    // kprint("\n");
 }
 
 void init_keyboard() {
@@ -105,7 +107,8 @@ void print_letter(u8 scancode) {
 			kprint("]");
 			break;
 		case 0x1C:
-			kprint("ENTER");
+			// ENTER
+			kprint("\n");
 			break;
 		case 0x1D:
 			kprint("LCtrl");
@@ -192,7 +195,8 @@ void print_letter(u8 scancode) {
             kprint("LAlt");
             break;
         case 0x39:
-            kprint("Spc");
+			// SPACE
+            kprint(" ");
             break;
         default:
             /* 'keuyp' event corresponds to the 'keydown' + 0x80 
@@ -201,8 +205,8 @@ void print_letter(u8 scancode) {
             if (scancode <= 0x7f) {
                 kprint("Unknown key down");
             } else if (scancode <= 0x39 + 0x80) {
-                kprint("key up ");
-                print_letter(scancode - 0x80);
+                // kprint("key up ");
+                // print_letter(scancode - 0x80);
             } else kprint("Unknown key up");
             break;
     }
