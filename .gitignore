@@ -6,4 +6,4 @@
 libc/
 bin/
 *.bin
-*.iso
+*.iso.DS_Store
